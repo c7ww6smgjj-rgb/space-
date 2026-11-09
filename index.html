@@ -1,0 +1,106 @@
+<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>رحلة الفضاء | عرض تفاعلي</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--c:#6ea8ff;--g:#ffd479;--ok:#2ecc8f;--no:#ff5a6e;color-scheme:dark;box-sizing:border-box}
+*{box-sizing:border-box;margin:0}html,body{height:100%;overflow:hidden;background:#04060f;color:#e9efff;font-family:Tajawal,sans-serif}
+#c{position:fixed;inset:0;width:100%;height:100%;z-index:1}
+#hud{position:fixed;top:0;inset-inline:0;z-index:6;display:flex;justify-content:space-between;align-items:center;padding:calc(14px + env(safe-area-inset-top,0px)) 5vw 14px;font-weight:700}
+#hud b{color:var(--g);letter-spacing:.05em}#sc{background:#ffffff14;border:1px solid #ffffff24;padding:5px 16px;border-radius:20px;font-size:.9rem}
+#bar{position:fixed;top:0;inset-inline:0;height:3px;z-index:7;background:#ffffff14}#bar i{display:block;height:100%;width:0;background:linear-gradient(270deg,var(--c),var(--g));transition:width .8s}
+.s{position:fixed;inset:0;z-index:3;display:flex;align-items:center;justify-content:flex-start;padding:90px 6vw;opacity:0;visibility:hidden;transform:perspective(1400px) rotateY(-24deg) translateZ(-260px);transition:opacity .8s,transform .9s,visibility .8s}
+.s.on{opacity:1;visibility:visible;transform:none}
+.card{width:min(580px,100%);background:rgba(12,16,36,.58);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(140,180,255,.25);border-radius:24px;padding:30px;box-shadow:0 24px 70px #000a,inset 0 0 50px rgba(90,120,255,.08);transform:perspective(1000px) rotateY(var(--ry,0deg)) rotateX(var(--rx,0deg));transition:transform .25s}
+.k{color:var(--c);letter-spacing:.25em;font-size:.75rem;margin-bottom:10px;font-weight:500}
+h1{font-size:clamp(2.4rem,6vw,4rem);font-weight:800;line-height:1.2;background:linear-gradient(100deg,#fff,var(--c),var(--g));-webkit-background-clip:text;background-clip:text;color:transparent}
+h2{font-size:clamp(1.3rem,3vw,1.75rem);line-height:1.6;margin-bottom:16px;font-weight:700}
+p{color:#aab6d6;line-height:1.9}
+.btn{border:0;border-radius:40px;padding:13px 30px;font:700 1rem Tajawal;cursor:pointer;color:#06101f;background:linear-gradient(100deg,var(--c),#9bd0ff);box-shadow:0 0 30px #6ea8ff55;transition:.3s;margin-top:18px}
+.btn:hover{transform:translateY(-3px) scale(1.04);box-shadow:0 0 44px #6ea8ffaa}.btn.g{background:#ffffff14;color:#e9efff;box-shadow:none;border:1px solid #ffffff30}
+.o{display:flex;align-items:center;gap:12px;width:100%;text-align:right;background:#ffffff0d;border:1px solid #ffffff24;color:#e9efff;padding:13px 16px;margin:9px 0;border-radius:14px;font:500 1.02rem Tajawal;cursor:pointer;transition:.3s}
+.o b{width:30px;height:30px;border-radius:50%;background:#ffffff1c;display:grid;place-items:center;flex:none;font-size:.85rem}
+.o:hover{transform:translateX(-8px) scale(1.02);border-color:var(--c);background:#6ea8ff22}
+.o.ok{background:#2ecc8f33;border-color:var(--ok);animation:pop .6s}.o.no{background:#ff5a6e33;border-color:var(--no);animation:shk .5s}.o.dis{pointer-events:none;opacity:.8}
+@keyframes pop{50%{transform:scale(1.06)}}@keyframes shk{25%{transform:translateX(10px)}75%{transform:translateX(-10px)}}
+.inf{margin-top:12px;padding:12px 16px;border-inline-start:3px solid var(--g);background:#ffd47914;border-radius:8px;color:#f3e6c4;font-size:.95rem;display:none}.inf.show{display:block;animation:up .6s}
+@keyframes up{from{opacity:0;transform:translateY(14px)}}
+.fg{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}.fc{perspective:800px;height:150px;cursor:pointer}.fi{position:relative;height:100%;transition:transform .8s;transform-style:preserve-3d}.fc.f .fi{transform:rotateY(180deg)}
+.fi>div{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:16px;border:1px solid #ffffff2a;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:10px;background:#ffffff0f}
+.fi .f1 span{font-size:2.2rem}.fi .bk{transform:rotateY(180deg);background:#6ea8ff22;font-size:.82rem;line-height:1.6;color:#dce8ff}
+.big{font-size:4.5rem;font-weight:800;color:var(--g);line-height:1}.st{font-size:2rem;margin:10px 0;letter-spacing:.2em}
+#nav{position:fixed;bottom:0;inset-inline:0;z-index:6;display:flex;justify-content:space-between;padding:14px 5vw calc(14px + env(safe-area-inset-bottom,0px));align-items:center}
+#nav .btn{margin:0;padding:10px 24px}#nx:disabled{opacity:.3;pointer-events:none}#dots{display:flex;gap:7px}#dots i{width:8px;height:8px;border-radius:50%;background:#ffffff30;transition:.4s}#dots i.on{background:var(--g);transform:scale(1.5)}
+@media(max-width:760px){.s{align-items:flex-end;padding:80px 4vw 76px}.card{padding:20px}.fc{height:120px}.fi .bk{font-size:.7rem}#dots{display:none}}
+</style></head><body>
+<canvas id="c"></canvas><div id="bar"><i></i></div>
+<div id="hud"><b>✦ رحلة الفضاء</b><span id="sc">النقاط: ٠</span></div>
+<div id="deck"></div>
+<div id="nav"><button class="btn g" id="pv">→ السابق</button><div id="dots"></div><button class="btn" id="nx">التالي ←</button></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const Q=[
+{q:'ما هو أكبر كوكب في المجموعة الشمسية؟',o:['زحل','المشتري','الأرض','المريخ'],a:1,i:'يتّسع المشتري لأكثر من ١٣٠٠ كوكب بحجم الأرض!'},
+{q:'أي كوكب يُعرف بالكوكب الأحمر؟',o:['الزهرة','عطارد','المريخ','نبتون'],a:2,i:'لونه الأحمر سببه أكسيد الحديد (الصدأ) على سطحه.'},
+{q:'كم يستغرق ضوء الشمس ليصل إلى الأرض تقريبًا؟',o:['ثانية واحدة','٨ دقائق','ساعة','يوم كامل'],a:1,i:'نرى الشمس دائمًا كما كانت قبل ٨ دقائق تقريبًا.'},
+{q:'ما اسم المجرة التي نعيش فيها؟',o:['أندروميدا','المثلث','درب التبانة','الدوّامة'],a:2,i:'تضم مجرتنا أكثر من ١٠٠ مليار نجم.'},
+{q:'من أول إنسان وطئت قدمه سطح القمر؟',o:['يوري غاغارين','باز ألدرين','جون غلين','نيل أرمسترونغ'],a:3,i:'حدث ذلك في ٢٠ يوليو ١٩٦٩ ضمن مهمة أبولو ١١.'}];
+const FACTS=[['☀️','الشمس','تحتوي على ٩٩٪ من كتلة المجموعة الشمسية كلها.'],['🌍','الأرض','الكوكب الوحيد المعروف بوجود الحياة، ويدور حول الشمس في ٣٦٥ يومًا.'],['🪐','زحل','كثافته أقل من الماء، ولو وُجد محيط يسعه لطفا فوقه!']];
+const L=['أ','ب','ج','د'],N=Q.length+3;let cur=0,score=0,ans=[];
+const dk=document.getElementById('deck');let h='';
+h+=`<div class="s"><div class="card"><div class="k">عرض تفاعلي ثلاثي الأبعاد</div><h1>رحلة في أعماق الفضاء</h1><p style="margin-top:12px">اختبر معلوماتك عن الكواكب والنجوم والمجرات. انقر على الإجابة الصحيحة وشاهد الكون يتفاعل معك.</p><button class="btn" onclick="start()">ابدأ الرحلة 🚀</button></div></div>`;
+h+=`<div class="s"><div class="card"><div class="k">قبل الاختبار</div><h2>تعرّف على ثلاثة أبطال</h2><p>انقر على كل بطاقة لتقلبها وتعرف معلومتها.</p><div class="fg">${FACTS.map(f=>`<div class="fc" onclick="this.classList.toggle('f');snd('tick')"><div class="fi"><div class="f1"><span>${f[0]}</span><b>${f[1]}</b></div><div class="bk">${f[2]}</div></div></div>`).join('')}</div></div></div>`;
+Q.forEach((q,i)=>{h+=`<div class="s"><div class="card"><div class="k">السؤال ${i+1} من ${Q.length}</div><h2>${q.q}</h2>${q.o.map((o,j)=>`<button class="o" onclick="pick(${i},${j},this)"><b>${L[j]}</b>${o}</button>`).join('')}<div class="inf" id="i${i}">💡 ${q.i}</div></div></div>`});
+h+=`<div class="s"><div class="card" style="text-align:center"><div class="k">النتيجة النهائية</div><div class="big" id="rs">٠/٥</div><div class="st" id="rt">★★★★★</div><h2 id="rm"></h2><button class="btn" onclick="restart()">أعد الرحلة 🔄</button></div></div>`;
+dk.innerHTML=h;const S=[...dk.children];
+document.getElementById('dots').innerHTML=S.map(()=>'<i></i>').join('');
+/* audio */
+let A;function snd(k){if(!A)return;const t=A.currentTime,P=(f,d,ty='sine',v=.15,dl=0)=>{const o=A.createOscillator(),g=A.createGain();o.type=ty;o.frequency.setValueAtTime(f,t+dl);g.gain.setValueAtTime(v,t+dl);g.gain.exponentialRampToValueAtTime(.001,t+dl+d);o.connect(g);g.connect(A.destination);o.start(t+dl);o.stop(t+dl+d)};
+if(k=='ok'){[523,659,784,1047].forEach((f,i)=>P(f,.6,'sine',.14,i*.09))}else if(k=='no'){P(160,.5,'sawtooth',.1);P(120,.5,'sawtooth',.1,.15)}else if(k=='go'){const o=A.createOscillator(),g=A.createGain();o.frequency.setValueAtTime(200,t);o.frequency.exponentialRampToValueAtTime(900,t+.5);g.gain.setValueAtTime(.06,t);g.gain.exponentialRampToValueAtTime(.001,t+.6);o.connect(g);g.connect(A.destination);o.start();o.stop(t+.6)}else P(880,.15,'triangle',.08)}
+/* three */
+const cv=document.getElementById('c'),R=new THREE.WebGLRenderer({canvas:cv,antialias:true});R.setPixelRatio(Math.min(devicePixelRatio,2));
+const Sc=new THREE.Scene(),Cm=new THREE.PerspectiveCamera(42,1,.1,400);
+function cvt(w,h,fn){const c=document.createElement('canvas');c.width=w;c.height=h;fn(c.getContext('2d'),w,h);return new THREE.CanvasTexture(c)}
+const dot=cvt(64,64,(x)=>{const g=x.createRadialGradient(32,32,0,32,32,32);g.addColorStop(0,'#fff');g.addColorStop(1,'#fff0');x.fillStyle=g;x.fillRect(0,0,64,64)});
+const sp=new Float32Array(2400*3);for(let i=0;i<2400;i++){const r=60+Math.random()*90,a=Math.random()*6.283,b=Math.acos(2*Math.random()-1);sp.set([r*Math.sin(b)*Math.cos(a),r*Math.cos(b),r*Math.sin(b)*Math.sin(a)],i*3)}
+const sg=new THREE.BufferGeometry();sg.setAttribute('position',new THREE.BufferAttribute(sp,3));const stars=new THREE.Points(sg,new THREE.PointsMaterial({size:.7,map:dot,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,color:0xcfe0ff}));Sc.add(stars);
+Sc.add(new THREE.AmbientLight(0x6a7aa8,.55));const dl=new THREE.DirectionalLight(0xfff0d8,1.4);dl.position.set(5,4,6);Sc.add(dl);
+function bands(cols){return cvt(256,128,(x,w,h)=>{cols.forEach((c,i)=>{x.fillStyle=c;x.fillRect(0,i*h/cols.length,w,h/cols.length+1)});x.globalAlpha=.25;for(let i=0;i<60;i++){x.fillStyle=Math.random()>.5?'#fff':'#000';x.fillRect(Math.random()*w,Math.random()*h,40,1)}})}
+function ringGeo(i,o){const g=new THREE.RingGeometry(i,o,96),p=g.attributes.position,u=g.attributes.uv,v=new THREE.Vector3();for(let k=0;k<p.count;k++){v.fromBufferAttribute(p,k);u.setXY(k,(v.length()-i)/(o-i),.5)}return g}
+const rtex=cvt(256,4,(x,w)=>{for(let i=0;i<w;i+=2){x.fillStyle=`rgba(${220+Math.random()*30},${190+Math.random()*30},150,${.25+Math.random()*.6})`;x.fillRect(i,0,2,4)}});
+function saturn(r,b){const g=new THREE.Group();g.add(new THREE.Mesh(new THREE.SphereGeometry(r,48,48),new THREE.MeshStandardMaterial({map:bands(b),roughness:.8})));const rg=new THREE.Mesh(ringGeo(r*1.4,r*2.4),new THREE.MeshBasicMaterial({map:rtex,transparent:true,side:THREE.DoubleSide}));rg.rotation.x=Math.PI/2;g.add(rg);g.rotation.z=.4;return g}
+const hero=saturn(1.5,['#e6cf9a','#c9a96a','#e9d8ac','#b98f55','#e3c98f','#caa66a']);Sc.add(hero);
+const halo=new THREE.Sprite(new THREE.SpriteMaterial({map:dot,color:0x6ea8ff,transparent:true,opacity:.35,blending:THREE.AdditiveBlending,depthWrite:false}));halo.scale.set(12,12,1);Sc.add(halo);
+const SO=new THREE.Group();SO.position.set(0,0,-30);Sc.add(SO);
+SO.add(new THREE.Mesh(new THREE.SphereGeometry(2.6,32,32),new THREE.MeshBasicMaterial({color:0xffb347})));
+const sun=new THREE.Sprite(new THREE.SpriteMaterial({map:dot,color:0xff9a2e,transparent:true,opacity:.9,blending:THREE.AdditiveBlending,depthWrite:false}));sun.scale.set(14,14,1);SO.add(sun);
+const sl=new THREE.PointLight(0xffe2b0,2.2,90);SO.add(sl);
+const PL=[[.4,5,'#9b8f86',1.6],[.65,7.5,'#e0b36a',1.2],[.7,10,'#3b82f6',1],[.5,12.5,'#c1440e',.8],[1.5,16.5,'#d9a066',.5],[1.1,21,'#e6cf9a',.38]].map((d,i)=>{const o=new THREE.Group();let m=i==5?saturn(d[0],['#e6cf9a','#c9a96a','#e9d8ac']):new THREE.Mesh(new THREE.SphereGeometry(d[0],32,32),new THREE.MeshStandardMaterial({color:d[2],roughness:.85}));o.add(m);o.userData={d:d[1],s:d[3],a:Math.random()*6.28,m};SO.add(o);
+const pts=[];for(let k=0;k<=96;k++)pts.push(new THREE.Vector3(Math.cos(k/96*6.283)*d[1],0,Math.sin(k/96*6.283)*d[1]));SO.add(new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(pts),new THREE.LineBasicMaterial({color:0x6ea8ff,transparent:true,opacity:.18})));return o});
+const MN=180,mp=new Float32Array(MN*3),mv=Array.from({length:MN},()=>new THREE.Vector3()),mg=new THREE.BufferGeometry();mg.setAttribute('position',new THREE.BufferAttribute(mp,3));
+const mist=new THREE.Points(mg,new THREE.PointsMaterial({size:.6,map:dot,transparent:true,opacity:0,depthWrite:false,blending:THREE.AdditiveBlending}));Sc.add(mist);let mt=0;
+function burst(col,at){mist.material.color.set(col);for(let i=0;i<MN;i++){mp.set([at.x,at.y,at.z],i*3);mv[i].set(Math.random()-.5,Math.random()-.5,Math.random()-.5).normalize().multiplyScalar(4+Math.random()*9)}mt=1}
+let shake=0,mob=false;const cp=new THREE.Vector3(0,.5,9),cl=new THREE.Vector3(1.8,0,0),tp=cp.clone(),tl=cl.clone();
+function aim(i){mob=innerWidth<760;if(i==0){tp.set(0,.5,mob?11:9);tl.set(mob?0:1.9,mob?-1.5:0,0)}else{const a=i*.62;tp.set(Math.sin(a)*24,8+Math.cos(a*2)*3,-30+Math.cos(a)*24);tl.set(mob?0:4.5,mob?-5:0,-30)}}
+function size(){R.setSize(innerWidth,innerHeight);Cm.aspect=innerWidth/innerHeight;Cm.updateProjectionMatrix();aim(cur)}addEventListener('resize',size);
+const clk=new THREE.Clock();(function loop(){requestAnimationFrame(loop);const dt=Math.min(clk.getDelta(),.05),t=clk.elapsedTime;
+hero.rotation.y+=dt*.25;halo.position.copy(hero.position);stars.rotation.y+=dt*.004;
+PL.forEach(p=>{const u=p.userData;u.a+=dt*u.s*.35;p.position.set(Math.cos(u.a)*u.d,0,Math.sin(u.a)*u.d);u.m.rotation.y+=dt*.6});
+cp.lerp(tp,.035);cl.lerp(tl,.05);Cm.position.copy(cp);if(shake>0){Cm.position.x+=(Math.random()-.5)*shake;Cm.position.y+=(Math.random()-.5)*shake;shake-=dt*1.6}Cm.lookAt(cl);
+if(mt>0){for(let i=0;i<MN;i++){mp[i*3]+=mv[i].x*dt;mp[i*3+1]+=mv[i].y*dt;mp[i*3+2]+=mv[i].z*dt;mv[i].multiplyScalar(.97)}mg.attributes.position.needsUpdate=true;mt-=dt*.55;mist.material.opacity=Math.max(mt,0)}
+R.render(Sc,Cm)})();
+/* logic */
+function go(n){n=Math.max(0,Math.min(N-1,n));cur=n;S.forEach((s,i)=>s.classList.toggle('on',i==n));document.querySelectorAll('#dots i').forEach((d,i)=>d.classList.toggle('on',i==n));document.querySelector('#bar i').style.width=n/(N-1)*100+'%';
+aim(n);snd('go');const q=n-2;document.getElementById('nx').disabled=(q>=0&&q<Q.length&&ans[q]===undefined)||n==N-1;document.getElementById('pv').style.visibility=n?'visible':'hidden';document.getElementById('nx').style.display=n==0?'none':'';
+if(n==N-1)finish()}
+function start(){if(!A)A=new(window.AudioContext||webkitAudioContext)();go(1)}
+function pick(i,j,b){if(ans[i]!==undefined)return;ans[i]=j;const ok=j==Q[i].a,bs=b.parentElement.querySelectorAll('.o');bs.forEach(x=>x.classList.add('dis'));b.classList.add(ok?'ok':'no');if(!ok)bs[Q[i].a].classList.add('ok');
+const at=new THREE.Vector3(0,0,-30);if(ok){score++;snd('ok');burst(0x2ecc8f,at)}else{snd('no');burst(0xff5a6e,at);shake=1.2}
+document.getElementById('sc').textContent='النقاط: '+score.toLocaleString('ar-EG');document.getElementById('i'+i).classList.add('show');document.getElementById('nx').disabled=false}
+function finish(){const m=['الكون بانتظارك، جرّب مرة ثانية! 🌌','بداية جميلة يا مستكشف! 🔭','جيد! أنت في الطريق لتصبح رائدًا 👨‍🚀','رائع جدًا! معلوماتك فضائية 🚀','ممتاز! رائد فضاء متمرّس 🌠','عبقري الفضاء! علامة كاملة 🏆'];
+document.getElementById('rs').textContent=score.toLocaleString('ar-EG')+'/'+Q.length.toLocaleString('ar-EG');document.getElementById('rt').textContent='★'.repeat(score)+'☆'.repeat(Q.length-score);document.getElementById('rm').textContent=m[score];
+if(score>=3){snd('ok');burst(0xffd479,new THREE.Vector3(0,0,-30))}}
+function restart(){score=0;ans=[];document.getElementById('sc').textContent='النقاط: ٠';document.querySelectorAll('.o').forEach(o=>o.className='o');document.querySelectorAll('.inf').forEach(i=>i.classList.remove('show'));go(0)}
+document.getElementById('nx').onclick=()=>go(cur+1);document.getElementById('pv').onclick=()=>go(cur-1);
+addEventListener('keydown',e=>{if(e.key=='ArrowLeft'&&!document.getElementById('nx').disabled)go(cur+1);if(e.key=='ArrowRight')go(cur-1)});
+addEventListener('pointermove',e=>{const c=document.querySelector('.s.on .card');if(c){c.style.setProperty('--ry',((e.clientX/innerWidth-.5)*-8)+'deg');c.style.setProperty('--rx',((e.clientY/innerHeight-.5)*6)+'deg')}});
+size();go(0);
+</script></body></html>
